@@ -115,9 +115,9 @@
     <Content Include="images\free2.png" />
     <Content Include="images\legenda.jpg" />
     <Content Include="images\mi.jpg" />
+    <Content Include="images\red.png" />
     <Content Include="images\vibrano.png" />
     <Content Include="images\vzaperti.jpg" />
-    <Content Include="images\zaneto.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
