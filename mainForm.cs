@@ -25,7 +25,6 @@ namespace kino
             for (int i = 0; i < 3; i++)
             {
                 pictureBTN[i] = new Button();
-                this.Text = pictureBTN[i].ToString();
                 pictureBTN[i].Size = new Size(250, 300);
                 if(i == 0)
                 {
@@ -45,13 +44,33 @@ namespace kino
                     pictureBTN[i].Image = Image.FromFile("../../images/legenda.jpg");
                     pictureBTN[i].Name = "legenda";
                 }
-                pictureBTN[i].Click += MainForm_Click;
                 this.Controls.Add(pictureBTN[i]);
             }
-            //this.Text = "Кинотеатр Appolo";
+            this.Text = "Кинотеатр Appolo";
+            pictureBTN[0].Click += MainForm_Click;
+            pictureBTN[1].Click += MainForm_Click1;
+            pictureBTN[2].Click += MainForm_Click2;
+        }
+
+        private void MainForm_Click2(object sender, EventArgs e)
+        {
+            selectedFilm = "legenda";
+            openForm1(selectedFilm);
+        }
+
+        private void MainForm_Click1(object sender, EventArgs e)
+        {
+            selectedFilm = "mi";
+            openForm1(selectedFilm);
         }
 
         private void MainForm_Click(object sender, EventArgs e)
+        {
+            selectedFilm = "vzaperti";
+            openForm1(selectedFilm);
+        }
+
+        private void openForm1(string selectedFilm)
         {
             Form1 form = new Form1(selectedFilm);
             form.ShowDialog();
