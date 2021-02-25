@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -6,6 +7,7 @@ using System.Data.SqlClient;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -50,8 +52,6 @@ namespace kino
                     {
                         if (_arr[i, j].BackColor == Color.LightGreen)
                         {
-                            _arr[i, j].BackColor = Color.Transparent;
-                            _arr[i, j].Image = Image.FromFile("../../images/red.png");
                             connect.Open();
                             command = new SqlCommand("INSERT INTO client(film,seat,rjad,zal,time,date) VALUES(@f,@s,@r,@z,@tm,@dt)", connect);
                             command.Parameters.AddWithValue("@f", film);
@@ -65,6 +65,7 @@ namespace kino
                         }
                     }
                 }
+                Send_email();
             }
             else
             {
@@ -79,6 +80,72 @@ namespace kino
                         }
                     }
                 }
+            }
+        }
+
+        void Send_email()
+        {
+            string to_email = Interaction.InputBox("Введите свой адрес электронной почты", "адрес электронной почты", "");
+            int mesto_I = I;
+            int rjad_J = J;
+
+            if (IsValidEmail(to_email) == true)
+            {
+                try
+                {
+                    MailMessage mail = new MailMessage(); //использовать можно не только этот плагин для отправления письма
+
+                    SmtpClient smtpClient = new SmtpClient("smtp.gmail.com")
+                    {
+                        Port = 587,
+                        Credentials = new System.Net.NetworkCredential(), // почта и пароль отправителя
+                        EnableSsl = true
+                    };
+
+                    //mail.From = new MailAddress();
+                    mail.To.Add(to_email);//адресат
+                    mail.Subject = "Билеты на " + infoLabel[1].Text;//тема письма
+                    mail.Body = infoLabel[1].Text + "\n Время - " + time.SelectedItem;
+
+                    for (int i = 0; i < mesto_I; i++)
+                    {
+                        for(int j = 0; j < rjad_J; j++)
+                        {
+                            if(_arr[i, j].BackColor == Color.LightGreen)
+                            {
+                                _arr[i, j].BackColor = Color.Transparent;
+                                _arr[i, j].Image = Image.FromFile("../../images/red.png");
+                                int mesto = i + 1;
+                                int rjad = j + 1;
+                                mail.Body += "\n Ваши места: место - " + mesto + ", ряд - " + rjad;
+                            }
+                        }
+                    }
+
+                    smtpClient.Send(mail);
+                    MessageBox.Show("Письмо отправлено");
+                }
+                catch
+                {
+                    MessageBox.Show("Ошибка");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Неверно введен адресс почты");
+            }
+        }
+
+        bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
             }
         }
 
@@ -101,7 +168,16 @@ namespace kino
 
         private void seats_load()
         {
+            if(I == 5 && J == 5)
+                this.Size = new Size(500,500);
+            if(I == 10 && J == 10)
+                this.Size = new Size(600, 700);
+            if (I == 15 && J == 15)
+                this.Size = new Size(900, 900);
+
             this.Text = "Выбирете места";
+            this.BackColor = Color.LightGray;
+
             _arr = new Label[I, J];
             read = new Label[I];
             osta = new Button();
@@ -285,10 +361,25 @@ namespace kino
                 infoLabel[1].Text = "Фильм: Легенда";
                 poster.Image = Image.FromFile("../../images/legenda.jpg");
             }
+            if (film == "fightclub")
+            {
+                infoLabel[1].Text = "Бойцовский клуб";
+                poster.Image = Image.FromFile("../../images/fightclub.jpg");
+            }
+            if (film == "pobeg")
+            {
+                infoLabel[1].Text = "Побег из претории";
+                poster.Image = Image.FromFile("../../images/pobeg.jpg");
+            }
+            if (film == "greenmile")
+            {
+                infoLabel[1].Text = "Зеленая миля";
+                poster.Image = Image.FromFile("../../images/greenmile.jpg");
+            }
 
             Id = Convert.ToInt32(data_.Rows[0].Cells[0].Value.ToString());
             infoLabel[2].Text = "Год: " + data_.Rows[0].Cells[2].Value.ToString();
-            infoLabel[3].Text = "Цена: " + data_.Rows[0].Cells[5].Value.ToString();
+            infoLabel[3].Text = "Цена: " + data_.Rows[0].Cells[3].Value.ToString();
             seans = datetime_.Value.ToString("yyyy.MM.dd");
         }
 

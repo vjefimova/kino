@@ -48,6 +48,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -111,10 +112,14 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <DependentUpon>movies.mdf</DependentUpon>
     </Content>
+    <Content Include="images\cinema-screen.ico" />
     <Content Include="images\error.png" />
+    <Content Include="images\fightclub.jpg" />
     <Content Include="images\free2.png" />
+    <Content Include="images\greenmile.jpg" />
     <Content Include="images\legenda.jpg" />
     <Content Include="images\mi.jpg" />
+    <Content Include="images\pobeg.jpg" />
     <Content Include="images\red.png" />
     <Content Include="images\vibrano.png" />
     <Content Include="images\vzaperti.jpg" />
